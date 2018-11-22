@@ -1,0 +1,23 @@
+.box  input{
+    width: 200px;
+    border-bottom: 1px solid red;
+}
+.set{
+    width: 300px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+}
+.right{
+    margin-left: 150px;
+    
+}
+.right  i{
+    margin-left: 8px;
+}
+.active{
+    font-weight: bold;
+}
+.bkg{
+    background: #ccc;
+}
