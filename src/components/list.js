@@ -5,9 +5,10 @@ import  './list.css'
 class List extends Component {
     state={
         val:'',
-        flag:false,
+        flag:'',
         set:'',
-        fw:''
+        fw:'',
+        selete:[]
     }
     render() {
         return (
@@ -15,33 +16,35 @@ class List extends Component {
             {
             this.props.arr.map((item,index)=>{
             return <div key={index} 
-                    onMouseOver={()=>this.init(item.name)}
+                    onMouseOver={()=>this.init(index)}
                     onClick={()=>this.fw(item.name)}
-                    className={this.state.set===item.name?"set bkg":'set'}
+                    className={this.state.set===index?"set bkg":'set'}
                     >
+                    {this.state.selete[index]===index?<Icon type="caret-down" />:null}
                     <Icon type="file" />
                     {
-                    this.state.flag!==item &&
+                    this.state.flag!==index &&
                         <span
-                        onDoubleClick={()=>this.clk(item,item.name)}
+                        onDoubleClick={()=>this.clk(index,item.name)}
                         className={this.state.fw===item.name?'active':null}
                         >
                         {item.name}
                         </span>
                     }
                     {
-                    this.state.flag===item && 
-                    <input type="text"  onKeyDown={(e)=>this.down(e,item.name)}
+                    this.state.flag===index && 
+                    <input type="text"  
+                    onKeyDown={(e)=>this.down(e,item.name)}
                     defaultValue={item.name}
                     onChange={(e)=>this.handleChange(e)}
                     onBlur={()=>{this.blur(item.name)}}
                         />
                     }
                     {
-                    this.state.set===item.name &&  
-                    this.state.flag!==item &&
+                    this.state.set===index &&  
+                    this.state.flag!==index &&
                     <span className="right">
-                        <Icon type="plus" />
+                        <Icon type="plus" onClick={()=>this.add(index)} />
                         <Popconfirm 
                         title="Are you sure delete this file?" 
                         onConfirm={()=>this.confirm(index)} 
@@ -61,6 +64,16 @@ class List extends Component {
     componentDidMount(){
 
     }
+    add=(ind)=>{
+     let  arr=this.props.arr;
+     this.state.selete.push(ind)
+     this.setState({
+      selete:this.state.selete,
+      flag:ind+1
+     })
+     arr.splice(ind+1,0,{name:'我是子页面',flag:false});
+     this.props.addselete(arr);
+    }
     handleChange=(e)=>{
       this.setState({
         val:e.target.value
@@ -68,9 +81,9 @@ class List extends Component {
         
       })
     }
-    clk=(val,name)=>{
+    clk=(ind,name)=>{
     this.setState({
-        flag:val,
+        flag:ind,
         set:'',
         val:name
     })
@@ -94,10 +107,12 @@ class List extends Component {
          })
        } 
     }
-    init=(val)=>{
-      this.setState({
-          set:val
-      })
+    init=(index)=>{
+     if(this.state.flag===false || this.state.flag===''){
+        this.setState({
+            set:index
+        })
+     }
     }
     blur=(name)=>{
       this.setState({
@@ -109,7 +124,7 @@ class List extends Component {
     let  arr = this.props.arr;
          arr.splice(index,1);
          this.props.delete(arr);
-         message.success('您已经删除成功');
+         message.success('您已经删除成功',1);
     }
     fw=(val)=>{
        this.setState({
@@ -135,6 +150,12 @@ let mapStateToProps = (state)=>{
                 type:'DELETE',
                 payload:newArr
             })
+        },
+        addselete(newArr){
+           dispatch({
+               type:'ADD_SELETE',
+               payload:newArr
+           }) 
         } 
       }
   }

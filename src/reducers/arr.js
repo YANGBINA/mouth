@@ -5,6 +5,8 @@ export  default   function  arr(state=[],action){
         return  [...action.payload]
     }else if(action.type==='DELETE'){
         return [...action.payload]
+    }else if(action.type==='ADD_SELETE'){
+        return [...action.payload]
     }
    return  state;
 }

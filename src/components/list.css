@@ -1,6 +1,7 @@
 .box  input{
     width: 200px;
     border-bottom: 1px solid red;
+    background: #ccc;
 }
 .set{
     width: 300px;

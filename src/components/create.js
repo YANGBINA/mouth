@@ -19,7 +19,8 @@ class Create extends Component {
          index:this.state.index+1
      })
      arr.push({
-         name:`页面${this.state.index}`
+         name:`页面${this.state.index}`,
+         flag:false
      })
      this.props.add(arr);
     }
